@@ -5,6 +5,9 @@ import  dotenv  from "dotenv";
 import { WebSocketServer } from 'ws';
 import { createServer } from 'http';
 import { handleWebSocket } from "./controllers/webSocketController.js";
+import chatRouter from "./routers/chatRouter.js"
+import roomRouter from "./routers/roomRouter.js";
+import cookieParser from "cookie-parser"
 
 
 dotenv.config();
@@ -19,6 +22,7 @@ const server = createServer(app);
 const wss =  new WebSocketServer({ server });
 
 app.use(express.json());
+app.use(cookieParser());
 handleWebSocket(wss);
 
 app.get("/" , (req , res)=>{
@@ -45,6 +49,8 @@ const start = async()=>{
 
 
 app.use("/api/v1/user" , userRouter);
+app.use("/api/v1/room" , roomRouter);
+app.use("/api/v1/chats" , chatRouter);
 
 start();
 

@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 import  jwt from "jsonwebtoken";
 
 
-
+// i have to genrate uploading avataar photo functionality here
 export const signup = async(req : Request , res : Response)=>{
     try{
         const result = userSchemaSignUp.safeParse(req.body);
