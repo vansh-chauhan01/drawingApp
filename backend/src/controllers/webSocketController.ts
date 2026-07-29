@@ -60,7 +60,13 @@ export const handleWebSocket = (wss : WebSocketServer)=>{
 
         ws.on("message" , async function message(data){
             // i will get data like this {type : "join_room,leave,chat", roomId : "", message?}
-            let parsedData = JSON.parse(data.toString());
+            let parsedData;
+            try{
+                parsedData = JSON.parse(data.toString());
+            }catch(e){
+                return;
+            }
+            
             
             if(parsedData.type === 'join_room'){
                 const user = users.find(x => x.ws == ws);
@@ -99,8 +105,13 @@ export const handleWebSocket = (wss : WebSocketServer)=>{
                 })
 
             }
+        })
 
-
+        ws.on("close" , ()=>{
+            const ind = users.findIndex(currUser => currUser.ws === ws);
+            if(ind !== -1){
+                users.splice(ind , 1)
+            }
         })
     })
 
