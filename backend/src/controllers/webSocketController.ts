@@ -21,12 +21,13 @@ type jwtPayload = {
 
 function checkUser(cookieHeader : string | undefined) : string | null{
     if(!cookieHeader){    
+        
         return null;
     }
+
         
     const cookies = cookie.parseCookie(cookieHeader)
-
-
+    
     const token = cookies?.access_token
 
     if(!token){        
@@ -36,6 +37,7 @@ function checkUser(cookieHeader : string | undefined) : string | null{
         const payload = jwt.verify(token , process.env.JWT_SECRET!) as jwtPayload;
         return payload.id
     }catch(e){
+        
         return null
     }
 }
@@ -45,6 +47,7 @@ export const handleWebSocket = (wss : WebSocketServer)=>{
 
         const cookieHeader = request.headers.cookie;
         const userId = checkUser(cookieHeader);
+       
 
         if(!userId){
             ws.close();

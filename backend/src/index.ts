@@ -8,6 +8,7 @@ import { handleWebSocket } from "./controllers/webSocketController.js";
 import chatRouter from "./routers/chatRouter.js"
 import roomRouter from "./routers/roomRouter.js";
 import cookieParser from "cookie-parser"
+import cors from "cors";
 
 
 dotenv.config();
@@ -23,6 +24,7 @@ const wss =  new WebSocketServer({ server });
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors());
 handleWebSocket(wss);
 
 app.get("/" , (req , res)=>{

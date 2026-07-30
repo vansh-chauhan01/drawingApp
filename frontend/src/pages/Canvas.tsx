@@ -1,53 +1,49 @@
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
+import initDraw from "../components/draw";
+import { useParams } from "react-router-dom";
 
 
 
 export default function Canvas(){
 
+    const[socket , setSocket] = useState<WebSocket | null>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    const {roomId} = useParams();
+    if(!roomId){
+        return
+    }
+    
+
+    useEffect(() =>{
+        const ws = new WebSocket(import.meta.env.VITE_WS_URL)
+
+        ws.onopen = ()=>{
+            setSocket(ws);
+            const data = JSON.stringify({
+                type : "join_room",
+                roomId
+            });
+            ws.send(data);
+        }
+    },[])
+
 
     useEffect(()=>{
+
+        if(!socket) return
 
         const canvas = canvasRef.current;
         if(!canvas){
             return
         }
 
-        const canvasCtx = canvas.getContext("2d")
+        initDraw(canvas , roomId ,socket);
+        
+    }, [canvasRef , socket, roomId])
 
-
-        let isClicked = false;
-        let xCord = 0;
-        let yCord = 0;
-        canvas.addEventListener("mousedown", (e)=>{
-            isClicked = true;
-            xCord = e.clientX;
-            yCord = e.clientY;
-        })
-
-        canvas.addEventListener("mouseup", (e)=>{
-            isClicked = false;
-            let x = e.clientX;
-            let y = e.clientY;
-            canvasCtx?.clearRect(0 , 0 , canvas.width , canvas.height)
-            canvasCtx?.strokeRect(xCord , yCord , x - xCord , y - yCord);
-        })
-
-        canvas.addEventListener("mousemove", (e)=>{
-            if(isClicked){
-                let x = e.clientX;
-                let y = e.clientY;
-                canvasCtx?.clearRect(0 , 0 , canvas.width , canvas.height)
-                canvasCtx?.strokeRect(xCord , yCord , x - xCord , y - yCord);
-            }
-            
-        })
-
-
-
-
-    }, [canvasRef])
-
+    if(!socket){
+        return <div> connecting to your room . . . . </div>
+    }
 
     return (
         <div>
