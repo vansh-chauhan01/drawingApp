@@ -12,7 +12,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LandingPage/>}/>
-          <Route path="/auth" element={<AuthPage/>}/>
+          <Route path="/auth/" element={<AuthPage/>}/>
           <Route path="/canvas/:roomId" element={<Canvas/>}/>
         </Routes>
       </BrowserRouter>

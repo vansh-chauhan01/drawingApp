@@ -85,9 +85,13 @@ export const signIn = async(req : Request , res : Response) =>{
         const {password : _ , ...obj} = user
         // i have to change this during deploy
         return res.status(200).cookie('access_token', token, {
-            httpOnly: true,
-            secure: false,
-            sameSite: "none",
+             httpOnly: true,
+    secure: false,
+    sameSite: "lax",
+    path: "/",
+            // httpOnly: true,
+            // secure: false,
+            // sameSite: "none",
         }).json(obj)
         
 

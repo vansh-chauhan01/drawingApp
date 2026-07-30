@@ -44,7 +44,7 @@ function checkUser(cookieHeader : string | undefined) : string | null{
 
 export const handleWebSocket = (wss : WebSocketServer)=>{
     wss.on("connection" , function connection(ws : WebSocket , request){
-
+        // console.log("cookie is :" + request.headers.cookie);
         const cookieHeader = request.headers.cookie;
         const userId = checkUser(cookieHeader);
        
@@ -102,7 +102,7 @@ export const handleWebSocket = (wss : WebSocketServer)=>{
                 await prisma.chat.create({
                     data : {
                         message : message,
-                        roomId : roomId,
+                        roomId : Number(roomId),
                         userId : userId
                     }
                 })
