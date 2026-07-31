@@ -1,11 +1,19 @@
 import { useEffect, useRef, useState } from "react"
-import initDraw from "../components/draw";
+// import initDraw from "../components/draw";
 import { useParams } from "react-router-dom";
+import { IconButton } from "../components/IconButton";
+import EditIcon from '@mui/icons-material/Edit';
+import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
+import RectangleOutlinedIcon from '@mui/icons-material/RectangleOutlined';
+import { Game } from "../components/Game";
 
-
+type toolType = "circle" | "rect" | "pencil"
 
 export default function Canvas(){
 
+
+    const[currTool , setCurrTool] = useState<toolType>("rect");
+    const[game , setGame] = useState<Game>();
     const[socket , setSocket] = useState<WebSocket | null>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const {roomId} = useParams();
@@ -27,6 +35,9 @@ export default function Canvas(){
         }
     },[])
 
+    useEffect(()=>{
+        game?.setTool(currTool)
+    }, [currTool , game])
 
     useEffect(()=>{
 
@@ -37,7 +48,12 @@ export default function Canvas(){
             return
         }
 
-        initDraw(canvas , roomId ,socket);
+        const newgame = new Game(canvas , roomId ,socket);
+        setGame(newgame)
+        return ()=>{
+            newgame.destroy();
+        }
+        // initDraw(canvas , roomId ,socket);
         
     }, [canvasRef , socket, roomId])
 
@@ -46,8 +62,32 @@ export default function Canvas(){
     }
 
     return (
-        <div>
-            <canvas ref={canvasRef} height={1000} width={1000}></canvas>
+        <div style={{
+            height: "100vh",
+            overflow: "hidden"
+        }}>
+            <canvas  ref={canvasRef} width={window.innerWidth} height={window.innerHeight}></canvas>
+            <TopBar currTool = {currTool} setCurrTool = {setCurrTool} />
+            
         </div>
+        
     )
+}
+
+
+function TopBar({currTool , setCurrTool} : {
+    currTool : toolType ,
+    setCurrTool :  (s : toolType) => void
+}){
+    return <div className="fixed , top-10 left-10">
+        <IconButton icon={<EditIcon/>} onClick={()=>{setCurrTool("pencil")}} activated={currTool ==="pencil"}>
+
+        </IconButton >
+        <IconButton icon={<CircleOutlinedIcon/>} onClick={()=>{setCurrTool("circle")}} activated={currTool ==="circle"}>
+            
+        </IconButton>
+        <IconButton icon={<RectangleOutlinedIcon/>} onClick={()=>{setCurrTool("rect")}} activated={currTool ==="rect"}>
+            
+        </IconButton>
+    </div>
 }
