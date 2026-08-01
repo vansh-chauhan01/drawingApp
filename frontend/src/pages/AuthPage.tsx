@@ -122,7 +122,7 @@ export default function Authentication() {
           <form  className="mt-8" onSubmit={handleSubmit}>
             
               <div className="mb-4">
-                <label className="block mb-1.5 font-medium text-sm text-gray-800">Name</label>
+                <label className="block mb-1.5 font-medium text-sm text-gray-800">userName </label>
                 <input
                   type="text"
                   value={userName}
