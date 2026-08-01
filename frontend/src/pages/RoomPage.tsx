@@ -14,7 +14,7 @@ const RoomPage = () => {
     const handleLogout = async() => {
         const url = import.meta.env.VITE_BACKEND_URL;
         try{
-            const res = await axios.post(`${url}/api/v1/user/logout` , {} , {withCredentials : true});
+            await axios.post(`${url}/api/v1/user/logout` , {} , {withCredentials : true});
              router("/");
         }catch(e){
             console.log(e);
@@ -71,7 +71,7 @@ const RoomPage = () => {
         </div>
 
         {/* Right card */}
-        <div className="w-full md:w-[520px] min-h-[500px] bg-white rounded-xl shadow-2xl p-12 flex flex-col justify-center">
+        <div className="w-full md:w-130 min-h-125 bg-white rounded-xl shadow-2xl p-12 flex flex-col justify-center">
           <h1 className="text-5xl font-extrabold text-[#0066cc] mb-6">
             Join A Room
           </h1>

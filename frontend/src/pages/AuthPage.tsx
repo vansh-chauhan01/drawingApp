@@ -15,14 +15,14 @@ export default function Authentication() {
     const router = useNavigate();
 
 
-    const handleSubmit = async(e : React.FormEvent)=>{
+    const handleSubmit = async(e : React.SyntheticEvent<HTMLFormElement>)=>{
         e.preventDefault();
 
         if(formState == 1){
             //register
             try{
 
-                const res = await axios.post(`${url}/api/v1/user/signup` , {userName , email , password});
+                await axios.post(`${url}/api/v1/user/signup` , {userName , email , password});
                 router("/")
             }catch(e){
                 console.log(e);
@@ -34,7 +34,7 @@ export default function Authentication() {
             try{
                 // console.log(userName);
                 // console.log(password);
-                const res = await axios.post(`${url}/api/v1/user/signin` , {userName ,password} , {withCredentials : true});
+                await axios.post(`${url}/api/v1/user/signin` , {userName ,password} , {withCredentials : true});
                 router("/enterRoom");
                
             }catch(e){
@@ -50,7 +50,7 @@ export default function Authentication() {
 
   return (
     <div className="w-full min-h-screen bg-[#eef1fb] flex justify-center items-center p-6">
-      <div className="w-full max-w-[1100px] bg-white rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row min-h-[550px]">
+      <div className="w-full max-w-275 bg-white rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row min-h-137.5">
 
         {/* LEFT PANEL */}
         <div

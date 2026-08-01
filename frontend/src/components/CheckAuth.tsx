@@ -13,7 +13,7 @@ const CheckAuth = (Components : React.ComponentType) => {
             const checkAuth = async () => {
                 try{
                     const url = import.meta.env.VITE_BACKEND_URL;
-                    const res = await axios.get(`${url}/api/v1/user/isloggedin` , {withCredentials : true});
+                     await axios.get(`${url}/api/v1/user/isloggedin` , {withCredentials : true});
                     setLoading(false);
                 }catch(e){
                     console.error("Error checking authentication:", e);

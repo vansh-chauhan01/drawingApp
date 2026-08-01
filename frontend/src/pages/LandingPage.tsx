@@ -1,7 +1,6 @@
-import { useState } from 'react';
 import {Link} from "react-router-dom"
 import BrushIcon from '@mui/icons-material/Brush';
-import GitHubIcon from '@mui/icons-material/GitHub';
+
 
 
 const LandingPage = () => {
