@@ -5,11 +5,12 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Authentication() {
 
-    const [formState, setFormState] = useState(0); // 0 = login, 1 = register
+    const [formState, setFormState] = useState(1); // 0 = login, 1 = register
     const [showPassword, setShowPassword] = useState(false);
     const [email , setEmail] = useState("");
     const [password , setPassword] = useState("")
     const [userName , setUserName] = useState("")
+    const [error , setError] = useState("")
     const url : string = import.meta.env.VITE_BACKEND_URL;
     
     const router = useNavigate();
@@ -17,15 +18,22 @@ export default function Authentication() {
 
     const handleSubmit = async(e : React.SyntheticEvent<HTMLFormElement>)=>{
         e.preventDefault();
+        setError("");
 
         if(formState == 1){
             //register
             try{
-
+                
                 await axios.post(`${url}/api/v1/user/signup` , {userName , email , password});
-                router("/")
+                setFormState(0);
+                setUserName("");
+                setPassword("");
+                setEmail("");
             }catch(e){
-                console.log(e);
+                if(axios.isAxiosError(e) && e.response){
+                  console.log(e);
+                  setError(e.response.data.message);
+                }
             }
             
 
@@ -38,10 +46,11 @@ export default function Authentication() {
                 router("/enterRoom");
                
             }catch(e){
-                console.log(e);
+                if(axios.isAxiosError(e) && e.response){
+                  console.log(e);
+                  setError(e.response.data.message);
+                }
             }
-
-
         }
     }
 
@@ -78,7 +87,13 @@ export default function Authentication() {
                 Don't have an account?{' '}
                 <button
                   type="button"
-                  onClick={() => setFormState(1)}
+                  onClick={() => {
+                    setFormState(1)
+                    setEmail("")
+                    setPassword("")
+                    setUserName("")
+                    setError("")
+                  }}
                   className="text-blue-600 hover:underline font-medium"
                 >
                   Register Now ↗
@@ -89,7 +104,13 @@ export default function Authentication() {
                 Already have an account?{' '}
                 <button
                   type="button"
-                  onClick={() => setFormState(0)}
+                  onClick={() => {
+                    setFormState(0);
+                    setEmail("");
+                    setPassword("");
+                    setUserName("");
+                    setError("");
+                  }}
                   className="text-blue-600 hover:underline font-medium"
                 >
                   Sign In
@@ -104,7 +125,7 @@ export default function Authentication() {
                 <label className="block mb-1.5 font-medium text-sm text-gray-800">Name</label>
                 <input
                   type="text"
-                  
+                  value={userName}
                   
                   placeholder="Enter your UserName"
                   className="w-full h-11 px-4 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -124,6 +145,7 @@ export default function Authentication() {
                 </span>
                 <input
                     type="email"
+                    value={email}
                     onChange={e => setEmail(e.target.value)}
                     placeholder="Enter your email"
                     className="w-full h-11 pl-10 pr-4 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -145,6 +167,7 @@ export default function Authentication() {
                 type={showPassword ? 'text' : 'password'}
                 onChange={e=>setPassword(e.target.value)}                
                 placeholder="Enter your password"
+                value={password}
                 className="w-full h-11 pl-10 pr-10 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
               <button
@@ -173,7 +196,13 @@ export default function Authentication() {
               {formState === 0 ? 'Sign In' : 'Register'}
             </button>
           </form>
+          {error && (
+            <div className="mt-4 rounded-lg bg-red-100 border border-red-400 text-red-700 px-4 py-2 text-sm">
+                {error}
+            </div>
+          )}
         </div>
+        
       </div>
     </div>
   );

@@ -11,7 +11,7 @@ export const signup = async(req : Request , res : Response)=>{
         const result = userSchemaSignUp.safeParse(req.body);
         if(!result.success){
             return res.status(400).json({
-                message : result.error.issues
+                message : result.error.issues[0]?.message
             })
         }
 
@@ -55,7 +55,9 @@ export const signIn = async(req : Request , res : Response) =>{
         const data = userSchemaSignIn.safeParse(req.body);
 
         if(!data.success){
-            return res.status(400).json(data.error.issues);
+            return res.status(400).json({
+                message : data.error.issues[0]?.message
+            });
         }
 
         const {userName , password} = data.data
