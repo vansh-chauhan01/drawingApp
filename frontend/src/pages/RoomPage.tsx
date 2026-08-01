@@ -7,11 +7,13 @@ import checkAuth from '../components/CheckAuth';
 const RoomPage = () => {
 
     const[roomName , setRoomName] = useState("");
+    const[error , setError] = useState("");
 
 
     const router = useNavigate();
 
     const handleLogout = async() => {
+      setError("");
         const url = import.meta.env.VITE_BACKEND_URL;
         try{
             await axios.post(`${url}/api/v1/user/logout` , {} , {withCredentials : true});
@@ -22,6 +24,7 @@ const RoomPage = () => {
     }
 
     const handleJoinRoom = async ()=>{
+      setError("");
       try{
         const url = import.meta.env.VITE_BACKEND_URL;
         const res = await axios.get(`${url}/api/v1/room/${roomName}` , {withCredentials : true});
@@ -38,6 +41,10 @@ const RoomPage = () => {
         const res = await axios.post(`${url}/api/v1/room/` , {roomName} , {withCredentials : true});
         router(`/canvas/${res.data.roomId}`);
       }catch(e){
+        if(axios.isAxiosError(e) && e.response){
+          setError(e.response.data.message);
+        }
+        
         console.log(e);
       }
     }
@@ -93,6 +100,7 @@ const RoomPage = () => {
               MAKE ROOM
             </button>
           </div>
+          {error && <p className="text-red-500 mt-4">{error}</p>}
         </div>
       </div>
     </div>
