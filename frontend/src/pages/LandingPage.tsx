@@ -20,7 +20,7 @@ const LandingPage = () => {
         </div>
 
         <ul className="flex items-center gap-2 sm:gap-3">
-            <Link to="/auth">
+            <Link to="/auth" state = {{formState : 1}}>
             
             <li>
                 <button className="font-heading text-xs sm:text-sm font-semibold px-3 sm:px-5 py-2 sm:py-2.5 rounded-full border border-gray-200 hover:bg-gray-50 transition-colors">
@@ -28,7 +28,7 @@ const LandingPage = () => {
                 </button>
             </li>
             </Link>
-            <Link to="/auth">
+            <Link to="/auth" state = {{formState : 0}}>
           <li>
             <button className="font-heading text-xs sm:text-sm font-semibold px-3 sm:px-5 py-2 sm:py-2.5 rounded-full bg-[#0B1220] text-white hover:bg-black transition-colors">
               Sign in

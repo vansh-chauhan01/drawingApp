@@ -1,16 +1,22 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 
 export default function Authentication() {
 
-    const [formState, setFormState] = useState(1); // 0 = login, 1 = register
+    const location = useLocation();
+    const [formState, setFormState] = useState(location.state?.formState ?? 1); // reference for fututre for me 0 = login, 1 = register
     const [showPassword, setShowPassword] = useState(false);
     const [email , setEmail] = useState("");
     const [password , setPassword] = useState("")
     const [userName , setUserName] = useState("")
     const [error , setError] = useState("")
+
+    
+
+
     const url : string = import.meta.env.VITE_BACKEND_URL;
     
     const router = useNavigate();
