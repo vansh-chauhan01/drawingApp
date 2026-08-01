@@ -1,13 +1,14 @@
 import type { ReactNode } from "react";
 
-export function IconButton ({ icon , onClick , activated} : {
+export function IconButton ({ icon , onClick , activated , labels } : {
     icon : ReactNode,
     onClick : ()=> void,
-    activated : boolean
+    activated : boolean,
+    labels : string,
 }){
 
-    return <div className={`m-2 pointer rounded-full border p-2 bg-black hover:bg-gray ${activated === true ? "text-red-400" : "text-white"}`} onClick={onClick} >
+    return <button title = {`${labels}`} className={`m-2 pointer rounded-full border p-2 bg-black hover:bg-gray ${activated === true ? "text-red-400" : "text-white"}`} onClick={onClick} >
         {icon}
-    </div>
+    </button>
 
 }

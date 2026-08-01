@@ -1,13 +1,15 @@
 import { Router } from "express";
-import { getChats } from "../controllers/chatController.js";
+import { deleteChats, getChats  } from "../controllers/chatController.js";
+import { verifyToken } from "../middlewares/verifyToken.js";
 
 
 
 const router = Router();
 
 
-router.get("/:roomId" , getChats);
+router.get("/:roomId" , verifyToken , getChats);
+router.delete("/:roomId" , verifyToken, deleteChats);
 
-
+    
 
 export default router

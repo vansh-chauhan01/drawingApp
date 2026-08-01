@@ -83,6 +83,19 @@ export const handleWebSocket = (wss : WebSocketServer)=>{
                 user.rooms = user?.rooms.filter(currRoom => currRoom !== parsedData.roomId);
             }
 
+            if (parsedData.type === "clear_canvas") {
+                const roomId = parsedData.roomId;
+
+                users.forEach(currUser => {
+                    if (currUser.rooms.includes(roomId)) {
+                        currUser.ws.send(JSON.stringify({
+                            type: "clear_canvas",
+                            roomId
+                        }));
+                    }
+                });
+            }
+
             if(parsedData.type === 'chat'){
                 const roomId = parsedData.roomId;
                 const message = parsedData.message;

@@ -26,3 +26,31 @@ export const getChats = async(req : Request , res : Response)=>{
         })
     }
 }
+
+export const deleteChats = async(req : Request , res : Response)=>{
+    try{
+        console.log("params : " + req.params.roomId);
+        const roomId = Number(req.params.roomId);
+
+        if(!roomId){
+            return res.status(500)
+        }
+       
+
+        await prisma.chat.deleteMany({
+            where : {
+                roomId : roomId
+            }
+        })
+
+        return res.status(200).json({
+            message : "deleted all shapes"
+        })
+
+
+    }catch(e){
+        return res.status(500).json({
+            message : "couldnt delete shapes"
+        })
+    }
+}

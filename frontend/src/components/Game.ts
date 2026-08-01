@@ -13,6 +13,9 @@ type Shape = {
     centerX : number,
     centerY : number,
     radius : number
+} | {
+    type : "pencil",
+    points : {x : number , y : number}[]
 }
 
 
@@ -30,6 +33,7 @@ export class Game{
     private startY =0;
     private isClicked : boolean = false;
     private currTool : Tool = "circle";
+    private pencilPoints : {x : number , y : number}[] = [];
     
 
 
@@ -40,11 +44,10 @@ export class Game{
         this.socket = socket;
         this.ctx = canvas.getContext("2d")!;
         this.exsistingShapes = []
-        this.init();
+         this.init();
         this.wsInit();
         this.eventHandlers();
-
-        
+        this.pencilPoints = [];
 
     }
 
@@ -57,17 +60,21 @@ export class Game{
     // than i will have to connect to web socket for messages
 
     async init(){
-        const url = import.meta.env.VITE_BACKEND_URL;
-        const res = await axios.get(`${url}/api/v1/chats/${this.roomId}`);
-        const messages = res.data;
-    
+        try{
+            const url = import.meta.env.VITE_BACKEND_URL;
+            const res = await axios.get(
+                `${url}/api/v1/chats/${this.roomId}`,
+                { withCredentials: true }
+            );
 
-        const shapes = messages.map((currMess : {message : string}) =>{
-            const currShape = JSON.parse(currMess.message);
-            return currShape
-        });
-
-        this.exsistingShapes = shapes;
+            this.exsistingShapes = res.data.map((curr: { message: string }) =>
+                JSON.parse(curr.message)
+            );
+            this.renderCanvas();
+        }catch(e){
+            console.error("Error initializing game:", e);
+        }
+        
     }
 
     wsInit = async() =>{
@@ -77,15 +84,21 @@ export class Game{
             if(message.type === 'chat'){
                 const parsedMessage = JSON.parse(message.message);
                 this.exsistingShapes.push(parsedMessage);
-                // after i get new message just render it 
-                // rememeber vansh i have to do thhis after i make function to render
                 this.renderCanvas();
+            }
+
+            if(message.type === 'clear_canvas'){
+                this.exsistingShapes = [];
+                this.renderCanvas();
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this.ctx.fillStyle = "rgba(0, 0, 0)"
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
             }
         }
     }
 
     renderCanvas = ()=>{
-         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.fillStyle = "rgba(0, 0, 0)"
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -99,6 +112,15 @@ export class Game{
                 this.ctx.arc(shape.centerX, shape.centerY, Math.abs(shape.radius), 0, Math.PI * 2);
                 this.ctx.stroke();
                 this.ctx.closePath();                
+            }
+            else if (shape.type === "pencil") {
+                this.ctx.beginPath();
+                this.ctx.moveTo(shape.points[0].x, shape.points[0].y);
+                for (let i = 1; i < shape.points.length; i++) {
+                    this.ctx.lineTo(shape.points[i].x, shape.points[i].y);
+                }
+                this.ctx.stroke();
+                this.ctx.closePath();
             }
         })
     }
@@ -117,7 +139,7 @@ export class Game{
             this.renderCanvas();
             this.ctx.strokeStyle = "rgba(255, 255, 255)"
             const selectedTool = this.currTool;
-            console.log(selectedTool)
+
 
             if (selectedTool === "rect") {
                 this.ctx.strokeRect(this.startX, this.startY, width, height);   
@@ -130,6 +152,17 @@ export class Game{
                 this.ctx.arc(this.startX, this.startY, radius, 0, Math.PI * 2);
                 this.ctx.stroke();
                 this.ctx.closePath();              
+            }
+            else if(selectedTool === "pencil"){
+                this.pencilPoints.push({x : e.clientX , y : e.clientY});
+                this.ctx.beginPath();
+                this.ctx.moveTo(this.pencilPoints[0].x, this.pencilPoints[0].y);
+                for (let i = 1; i < this.pencilPoints.length; i++) {
+                    this.ctx.lineTo(this.pencilPoints[i].x, this.pencilPoints[i].y);
+                }
+                this.ctx.stroke();
+                this.ctx.closePath();
+
             }
         }
     }
@@ -163,12 +196,19 @@ export class Game{
                 radius,
             };
         }
+        else if (selectedTool === "pencil") {
+            shape = {
+                type: "pencil",
+                points: [...this.pencilPoints]
+            };
+            this.pencilPoints = [];
+        }
 
         if (!shape) {
             return;
         }
 
-        this.exsistingShapes.push(shape);
+        // this.exsistingShapes.push(shape);
 
         this.socket.send(JSON.stringify({
             type: "chat",
@@ -196,6 +236,28 @@ export class Game{
         this.canvas.removeEventListener("mousemove", this.mouseMoveListener)
     }
 
+
+    // clear canvas function
+    async clearCanvas(){
+        try{
+           
+            const url = import.meta.env.VITE_BACKEND_URL;
+            const currRoomId = Number(this.roomId);
+            await axios.delete(`${url}/api/v1/chats/${currRoomId}` , {withCredentials : true});
+            this.socket.send(JSON.stringify({
+                type : "clear_canvas",
+                roomId : this.roomId
+            }))
+            this.exsistingShapes = [];
+            this.renderCanvas();
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.ctx.fillStyle = "rgba(0, 0, 0)"
+            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        }catch(e){
+            console.error("Error clearing canvas:", e);
+        }
+        
+    }
 
 
 }

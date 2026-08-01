@@ -7,6 +7,7 @@ import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import RectangleOutlinedIcon from '@mui/icons-material/RectangleOutlined';
 import { Game } from "../components/Game";
 import CheckAuth from "../components/CheckAuth";
+import ClearIcon from '@mui/icons-material/Clear';
 
 type toolType = "circle" | "rect" | "pencil"
 
@@ -68,7 +69,7 @@ const Canvas = ()=>{
             overflow: "hidden"
         }}>
             <canvas  ref={canvasRef} width={window.innerWidth} height={window.innerHeight}></canvas>
-            <TopBar currTool = {currTool} setCurrTool = {setCurrTool} />
+            <TopBar currTool = {currTool} setCurrTool = {setCurrTool} game = {game} />
             
         </div>
         
@@ -76,19 +77,22 @@ const Canvas = ()=>{
 }
 
 
-function TopBar({currTool , setCurrTool} : {
+function TopBar({currTool , setCurrTool, game} : {
     currTool : toolType ,
     setCurrTool :  (s : toolType) => void
+    game : Game | undefined
 }){
-    return <div className="fixed , top-10 left-10">
-        <IconButton icon={<EditIcon/>} onClick={()=>{setCurrTool("pencil")}} activated={currTool ==="pencil"}>
-
-        </IconButton >
-        <IconButton icon={<CircleOutlinedIcon/>} onClick={()=>{setCurrTool("circle")}} activated={currTool ==="circle"}>
-            
+    return <div className="flex flex-col fixed , top-10 left-10">
+        <IconButton labels="rectangle" icon={<RectangleOutlinedIcon/>} onClick={()=>{setCurrTool("rect")}} activated={currTool ==="rect"}>
         </IconButton>
-        <IconButton icon={<RectangleOutlinedIcon/>} onClick={()=>{setCurrTool("rect")}} activated={currTool ==="rect"}>
-            
+        <IconButton labels="pencil" icon={<EditIcon/>} onClick={()=>{setCurrTool("pencil")}} activated={currTool ==="pencil"}>
+        </IconButton >
+        <IconButton labels="circle" icon={<CircleOutlinedIcon/>} onClick={()=>{setCurrTool("circle")}} activated={currTool ==="circle"}>
+        </IconButton>
+        <IconButton labels="clear canvas" icon ={<ClearIcon/>} onClick={()=>{
+            setCurrTool("rect");
+             game?.clearCanvas()
+            }} activated={false}>
         </IconButton>
     </div>
 }

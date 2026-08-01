@@ -1,3 +1,8 @@
+// shifted evrything from here to js class in Game.ts 
+// so code becomes more organized and easy to maintain
+// not deleting this file just in case i want to refer it in future
+
+
 // import type { Height } from "@mui/icons-material";
 // import axios from "axios"
 
