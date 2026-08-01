@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 import  jwt from "jsonwebtoken";
 
 
-// i have to genrate uploading avataar photo functionality here
+// i have to make uploading avataar photo functionality here
 export const signup = async(req : Request , res : Response)=>{
     try{
         const result = userSchemaSignUp.safeParse(req.body);
@@ -98,6 +98,32 @@ export const signIn = async(req : Request , res : Response) =>{
     }catch(e){
         return res.status(500).json({
             message : "error logging in user"
+        })
+    }
+}
+
+export const logout = async(req : Request , res : Response) =>{
+    try{
+        res.clearCookie("access_token" );
+        return res.status(200).json({
+            message : "user logged out successfully"
+        })
+    }catch(e){
+        return res.status(500).json({
+            message : "error logging out user"
+        })
+    }
+}
+
+
+export const isLoggedIn = async(req : Request , res : Response) =>{
+    try{
+        res.status(200).json({
+            message : "user is logged in"
+        })
+    }catch(e){
+        return res.status(500).json({
+            message : "error checking if user is logged in"
         })
     }
 }

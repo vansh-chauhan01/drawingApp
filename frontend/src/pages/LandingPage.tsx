@@ -36,6 +36,7 @@ const LandingPage = () => {
           </Link>
         </ul>
       </div>
+      
 
       {/* hero */}
       <div className="flex flex-col items-center text-center px-4 sm:px-6 pt-10 sm:pt-16 pb-14 sm:pb-20">

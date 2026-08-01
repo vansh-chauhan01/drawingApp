@@ -6,10 +6,11 @@ import EditIcon from '@mui/icons-material/Edit';
 import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import RectangleOutlinedIcon from '@mui/icons-material/RectangleOutlined';
 import { Game } from "../components/Game";
+import CheckAuth from "../components/CheckAuth";
 
 type toolType = "circle" | "rect" | "pencil"
 
-export default function Canvas(){
+const Canvas = ()=>{
 
 
     const[currTool , setCurrTool] = useState<toolType>("rect");
@@ -91,3 +92,6 @@ function TopBar({currTool , setCurrTool} : {
         </IconButton>
     </div>
 }
+
+
+export default CheckAuth(Canvas);

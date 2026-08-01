@@ -35,7 +35,7 @@ export default function Authentication() {
                 console.log(userName);
                 console.log(password);
                 const res = await axios.post(`${url}/api/v1/user/signin` , {userName ,password} , {withCredentials : true});
-                // router("/")
+                router("/enterRoom");
                
             }catch(e){
                 console.log(e);
