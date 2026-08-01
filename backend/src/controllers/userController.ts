@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 import  jwt from "jsonwebtoken";
 
 
-// i have to make uploading avataar photo functionality here
+
 export const signup = async(req : Request , res : Response)=>{
     try{
         const result = userSchemaSignUp.safeParse(req.body);
@@ -86,9 +86,9 @@ export const signIn = async(req : Request , res : Response) =>{
         // i have to change this during deploy
         return res.status(200).cookie('access_token', token, {
              httpOnly: true,
-    secure: false,
-    sameSite: "lax",
-    path: "/",
+            secure: true,
+            sameSite: "none",
+            path: "/",
             // httpOnly: true,
             // secure: false,
             // sameSite: "none",
@@ -104,7 +104,12 @@ export const signIn = async(req : Request , res : Response) =>{
 
 export const logout = async(req : Request , res : Response) =>{
     try{
-        res.clearCookie("access_token" );
+        res.clearCookie("access_token" ,{
+             httpOnly: true,
+            secure: true,
+            sameSite: "none",
+            path: "/",
+        });
         return res.status(200).json({
             message : "user logged out successfully"
         })

@@ -25,7 +25,7 @@ const wss =  new WebSocketServer({ server });
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND_URL,
     credentials: true,
 }));
 handleWebSocket(wss);
@@ -36,14 +36,15 @@ app.get("/" , (req , res)=>{
     })
 })
 
+const PORT = process.env.PORT || 8800;
 
 const start = async()=>{
     try{
         await prisma.$connect();
         console.log("database connected");
 
-        server.listen(8800 , async()=>{
-            console.log("listening on port 8800");
+        server.listen(PORT , async()=>{
+            console.log(`listening on port ${PORT}`);
         });
 
 
