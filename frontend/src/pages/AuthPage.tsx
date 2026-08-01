@@ -32,8 +32,8 @@ export default function Authentication() {
         }else{
             // login
             try{
-                console.log(userName);
-                console.log(password);
+                // console.log(userName);
+                // console.log(password);
                 const res = await axios.post(`${url}/api/v1/user/signin` , {userName ,password} , {withCredentials : true});
                 router("/enterRoom");
                

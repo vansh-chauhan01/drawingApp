@@ -35,6 +35,7 @@ export class Game{
     private currTool : Tool = "circle";
     private pencilPoints : {x : number , y : number}[] = [];
     
+    
 
 
     constructor(canvas : HTMLCanvasElement , roomId : string , socket : WebSocket){
@@ -107,7 +108,7 @@ export class Game{
                 this.ctx.strokeStyle = "rgba(255, 255, 255)"
                 this.ctx.strokeRect(shape.x, shape.y, shape.width, shape.height);
             } else if (shape.type === "circle") {
-                console.log(shape);
+                
                 this.ctx.beginPath();
                 this.ctx.arc(shape.centerX, shape.centerY, Math.abs(shape.radius), 0, Math.PI * 2);
                 this.ctx.stroke();

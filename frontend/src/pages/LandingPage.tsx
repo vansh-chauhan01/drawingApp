@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import DrawRoundedIcon from '@mui/icons-material/DrawRounded';
 import {Link} from "react-router-dom"
+import BrushIcon from '@mui/icons-material/Brush';
+import GitHubIcon from '@mui/icons-material/GitHub';
+
 
 const LandingPage = () => {
   return (
@@ -14,8 +16,8 @@ const LandingPage = () => {
       {/* navbar */}
       <div className="flex justify-between items-center h-16 sm:h-20 px-4 sm:px-8 max-w-7xl mx-auto">
         <div className="flex items-center gap-2 font-heading font-extrabold text-lg sm:text-xl text-blue-600">
-          <DrawRoundedIcon />
-          Excalidraw
+          <BrushIcon />
+          Scribble Kit
         </div>
 
         <ul className="flex items-center gap-2 sm:gap-3">
@@ -51,17 +53,23 @@ const LandingPage = () => {
         </h1>
 
         <p className="mt-5 sm:mt-6 max-w-xs sm:max-w-md md:max-w-xl text-gray-500 text-base sm:text-lg">
-          Draftflow gives you the speed of a pen and paper with the power of
+          Scribble Kit gives you the speed of a pen and paper with the power of
           infinite digital space. Zero friction, total expression.
         </p>
 
         <div className="mt-7 sm:mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full max-w-xs sm:max-w-none">
+          <Link to="/enterRoom">
           <button className="font-heading w-full sm:w-auto bg-blue-600 text-white font-semibold px-7 py-3.5 rounded-xl hover:bg-blue-700 transition-colors shadow-sm">
             Start Sketching
           </button>
+          </Link>
+
+          {/* vansh remember to change this link to your demo video link after i have made it  */}
+          <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noreferrer">
           <button className="font-heading w-full sm:w-auto bg-white text-gray-900 font-semibold px-7 py-3.5 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors">
-            View Examples
+            Watch Demo 
           </button>
+          </a>
         </div>
       </div>
       {/* image */}
@@ -72,6 +80,7 @@ const LandingPage = () => {
             alt="canvas image"
         />
         </div>
+
 
         {/* footer */}
         <div className="bg-[#0B1220] px-6 sm:px-16 py-16 sm:py-20">
@@ -100,7 +109,7 @@ const LandingPage = () => {
             </p>
           </div>
 
-          
+                   
 
 
         <div>

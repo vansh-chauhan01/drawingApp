@@ -29,7 +29,6 @@ export const getChats = async(req : Request , res : Response)=>{
 
 export const deleteChats = async(req : Request , res : Response)=>{
     try{
-        console.log("params : " + req.params.roomId);
         const roomId = Number(req.params.roomId);
 
         if(!roomId){

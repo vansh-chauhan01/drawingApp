@@ -17,8 +17,7 @@ const CheckAuth = (Components : React.ComponentType) => {
                     setLoading(false);
                 }catch(e){
                     console.error("Error checking authentication:", e);
-                    alert("You are not logged in. Please log in to access this page.");
-                    router("/");
+                    router("/auth");
                 }
             }
             checkAuth();
