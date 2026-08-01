@@ -40,7 +40,7 @@ export const makeRoom = async(req : Request , res : Response)=>{
 
     }catch(e){
         return res.status(500).json({
-            message : "couldnt make this room"
+            message : "room already exists with this name"
         })
     }
 }
