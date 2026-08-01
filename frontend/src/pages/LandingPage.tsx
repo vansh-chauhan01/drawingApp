@@ -64,7 +64,7 @@ const LandingPage = () => {
           </Link>
 
           {/* vansh remember to change this link to your demo video link after i have made it  */}
-          <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noreferrer">
+          <a href="https://youtu.be/1OK6zQCHIkY" target="_blank" rel="noreferrer">
           <button className="font-heading w-full sm:w-auto bg-white text-gray-900 font-semibold px-7 py-3.5 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors">
             Watch Demo 
           </button>
