@@ -115,11 +115,18 @@ export class Game{
                 this.ctx.closePath();                
             }
             else if (shape.type === "pencil") {
+                // if less than 2 points, we don't draw anything
+                if (shape.points.length < 2) {
+                    return;
+                }
+
                 this.ctx.beginPath();
                 this.ctx.moveTo(shape.points[0].x, shape.points[0].y);
+
                 for (let i = 1; i < shape.points.length; i++) {
                     this.ctx.lineTo(shape.points[i].x, shape.points[i].y);
                 }
+
                 this.ctx.stroke();
                 this.ctx.closePath();
             }
@@ -198,10 +205,18 @@ export class Game{
             };
         }
         else if (selectedTool === "pencil") {
+            // If there are fewer than 2 points, we don't create a shape
+            // if i send a shapePonts [] than backend will not be able to handle it.
+            if (this.pencilPoints.length < 2) {
+                this.pencilPoints = [];
+                return;
+            }
+
             shape = {
                 type: "pencil",
                 points: [...this.pencilPoints]
             };
+
             this.pencilPoints = [];
         }
 
