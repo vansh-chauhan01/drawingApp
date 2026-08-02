@@ -60,7 +60,7 @@ const RoomPage = () => {
           <div className="rounded-full p-1.5">
             <DrawRoundedIcon className="text-white" />
           </div>
-          <p className="text-xl font-medium">Excalidraw</p>
+          <p className="text-xl font-medium">Scribble Kit</p>
         </div>
         </Link>
         <div className="right">
